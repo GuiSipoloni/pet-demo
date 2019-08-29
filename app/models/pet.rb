@@ -1,11 +1,14 @@
 class Pet < ApplicationRecord
   belongs_to :person
 
-  MAXIMUM_COST = 100000 #R$ 1000.00
+  MAXIMUM_COST = 1000_00
 
-  validate :is_owner_adult? if: :type_is? 'andorinha'
-  validate :cant_owner_have_cat? if: :type_is? 'gato'
+  validate :is_owner_adult?, if: -> { self.pet_type.downcase == 'andorinha' }
+  validate :cant_owner_have_cat?, if: -> { self.pet_type.downcase == 'gato' }
   validate :is_maximum_cost_per_person?
+
+  scope :by_pet_type, -> (type) { where(pet_type: type) }
+
 
   private
 
@@ -18,10 +21,7 @@ class Pet < ApplicationRecord
   end
 
   def is_maximum_cost_per_person?
-    self.errors.add(:person, 'Owner reached the maximum cost') if self.person.pets.sum(:cost) == MAXIMUM_COST
+    self.errors.add(:person, 'Owner reached the maximum cost') if self.person.pet.sum(:cost) == MAXIMUM_COST
   end
 
-  def type_is?(type)
-    self.type.downcase == type
-  end
 end
