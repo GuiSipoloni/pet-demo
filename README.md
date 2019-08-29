@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Run Docker
 
-Things you may want to cover:
+Build docker image: `docker-compose build`
 
-* Ruby version
+Setup database: `docker-compose run --rm web rake db:setup`
 
-* System dependencies
+Run tests: `docker-compose run --rm web bundle exec rspec`
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Questions: `docker-compose run --rm -e RACK_ENV=test web bundle exec rspec -fd spec/models/pet_spec.rb:51`
